@@ -586,6 +586,7 @@ function generateWord(word, wordL, mcR, dist, mainAngle) {
             newCircle = new Circle(owner, type, subtype, d, r, angle);
         }
         else if (letter.match("^(a|e|i|o|u|[aeiou][1-5])$")) {
+            console.log(letter.substring(1,2));
             nLines = [0, 0, 1, 0, 1][subtype - 1];
             var previous = owner.children[owner.children.length - 1];
             r = globalR * 0.25;
