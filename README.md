@@ -5,14 +5,18 @@ Gallifreyan
 
 ### About
 
-You can view the site at: http://adrian17.github.io/Gallifreyan/
-The project's purpose is to quickly create complex and customizable Gallifreyan words/sentences, without the need for image processing tools.
-
 The project is based on Sherman's Circular Gallifreyan, for more information about the language visit http://www.shermansplanet.com/gallifreyan
+
+This is a fork of adrian17's Gallifreyan translater from http://adrian17.github.io/Gallifreyan/ , source at: https://github.com/adrian17/Gallifreyan
+
+You can view the site at:
+The project's purpose is to quickly create complex and customizable Gallifreyan words/sentences, without the need for image processing tools.
+This edition adds support for unifon characters*
+
 
 
 ### TODO:
-
+    Update Readme
 #### fixes:
 - the logic that limits angles in order to preserve letter/word order bugs out in rare cases
 - the same with the word circle drawing, it's even more important as the bug makes it impossible to make overlapping letters
