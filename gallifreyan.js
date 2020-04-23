@@ -98,12 +98,12 @@ function updateText() {
     for (var toParse of text) {
         var word = [];
         for (var i = 0; i < toParse.length; i++) {
-            if (toParse.substring(i, i + 2).match("(ch|sh|th|ng|qu|zh|ph|wh|gh|[aeiou][1-5])")) {
+            if (toParse.substring(i, i + 3).match("(th2)")) {
+                word.push(toParse.substring(i, i + 3));
+                i = i + 2;
+			} else if (toParse.substring(i, i + 2).match("(ch|sh|th|ng|qu|zh|ph|wh|gh|[aeiou][1-5])")) {
                 word.push(toParse.substring(i, i + 2));
                 i++;
-			} else if (toParse.substring(i, i + 3).match("(th2)")) {
-				word.push(toParse.substring(i, i + 3));
-				i = i + 2;
             } else if (toParse[i] === "c") {
                 //soft c comes usually before i, e or y
                 if (i+1 < toParse.length && toParse[i+1].match("[iey]"))
