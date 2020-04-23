@@ -98,9 +98,12 @@ function updateText() {
     for (var toParse of text) {
         var word = [];
         for (var i = 0; i < toParse.length; i++) {
-            if (toParse.substring(i, i + 2).match("(ch|sh|th|ng|qu)")) {
+            if (toParse.substring(i, i + 2).match("(ch|sh|th|ng|qu|zh|ph|wh|gh|[aeiou][1-5])")) {
                 word.push(toParse.substring(i, i + 2));
                 i++;
+			} else if (toParse.substring(i, i + 3).match("(th2)")) {
+				word.push(toParse.substring(i, i + 3));
+				i = i + 2;
             } else if (toParse[i] === "c") {
                 //soft c comes usually before i, e or y
                 if (i+1 < toParse.length && toParse[i+1].match("[iey]"))
@@ -520,7 +523,7 @@ function generateWords(words) {
     for (var word of words) {
         var wordL = 0;  //approximates the number of letters, taking into account that some will be merged
         for (var j = 0; j < word.length; j++) {
-            if (j > 0 && word[j].match("^(a|e|i|o|u)$") && !(word[j - 1].match("^(a|e|i|o|u)$"))) continue;
+            if (j > 0 && word[j].match("^(a|e|i|o|u|[aeiou][1-5])$") && !(word[j - 1].match("^(a|e|i|o|u|[aeiou][1-5])$"))) continue;
             wordL++;
         }
         generateWord(word, wordL, r, d, angle);
@@ -536,11 +539,16 @@ function generateWords(words) {
 
 //assigns the subtype
 var map = {
-    "b": 1, "ch": 2, "d": 3, "f": 4, "g": 5, "h": 6,
-    "j": 1, "k": 2, "l": 3, "m": 4, "n": 5, "p": 6,
-    "t": 1, "sh": 2, "r": 3, "s": 4, "v": 5, "w": 6,
-    "th": 1, "y": 2, "z": 3, "ng": 4, "qu": 5, "x": 6,
-    "a": 1, "e": 2, "i": 3, "o": 4, "u": 5
+    "b": 1, 	"ch": 2, 	"d": 3, 	"f": 4, 	"g": 5, 	"h": 6, "th2": 7,
+    "j": 1, 	"k": 2, 	"l": 3, 	"m": 4, 	"n": 5, 	"p": 6, "c": 7,		"ph": 8,
+    "t": 1, 	"sh": 2, 	"r": 3, 	"s": 4, 	"v": 5, 	"w": 6,	"zh":7,		"wh": 8,
+    "th": 1, 	"y": 2, 	"z": 3, 	"ng": 4, 	"qu": 5, 	"x": 6,	"q": 7,		"gh": 8,
+    "a": 1, 	"e": 2, 	"i": 3, 	"o": 4, 	"u": 5
+    "a1": 1,	"e1": 2,	"i1": 3,	"o1": 4,	"u1": 5,
+	"a2": 1,	"e2": 2,	"i2": 3,	"o2": 4,	"u2": 5,
+	"a3": 1,	"e3": 2,	"i3": 3,	"o3": 4,	"u3": 5,
+	"a4": 1,	"e4": 2,	"i4": 3,	"o4": 4,	"u4": 5,
+	"a5": 1,	"e5": 2,	"i5": 3,	"o5": 4,	"u5": 5
 };
 
 //generates a single word
@@ -561,7 +569,7 @@ function generateWord(word, wordL, mcR, dist, mainAngle) {
         var type = 0, r = 0, d = 0;
         var subtype = map[letter];
         var nLines = [0, 0, 0, 3, 1, 2][subtype - 1];
-        if (letter.match("^(b|ch|d|f|g|h)$")) {
+        if (letter.match("^(b|ch|d|th2|f|g|h)$")) {
             type = 1, r = globalR, d = mcR - r + 1;
             newCircle = new Circle(owner, type, subtype, d, r, angle);
         }
@@ -577,7 +585,7 @@ function generateWord(word, wordL, mcR, dist, mainAngle) {
             type = 4, r = globalR, d = mcR;
             newCircle = new Circle(owner, type, subtype, d, r, angle);
         }
-        else if (letter.match("^(a|e|i|o|u)$")) {
+        else if (letter.match("^(a|e|i|o|u|[aeiou][1-5])$")) {
             nLines = [0, 0, 1, 0, 1][subtype - 1];
             var previous = owner.children[owner.children.length - 1];
             r = globalR * 0.25;
