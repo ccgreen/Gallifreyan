@@ -590,7 +590,7 @@ function generateWord(word, wordL, mcR, dist, mainAngle) {
             if(letter.match("^([aeiou][1-5])$")){
                 console.log(letter.substring(1,2));
                 dots = letter.substring(1,2);
-                dots = dots + 0;
+                Number(dots);
                 console.log(dots);
             }
 
