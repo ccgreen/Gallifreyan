@@ -236,7 +236,7 @@ class Circle {
         this.isConsonant = ! this.isVowel;
         this.hasGaps = this.type === 1 || this.type === 3;
 
-        this.dots = this.isConsonant ? [null, 0, 2, 3, 0, 0, 0][this.subtype] : 0;
+        this.dots = this.isConsonant ? [null, 0, 2, 3, 0, 0, 0, 4, 1][this.subtype] : 0;
 
         this.nLines = 0;        //expected number of lines, according to rules
         this.lines = [];
@@ -568,7 +568,7 @@ function generateWord(word, wordL, mcR, dist, mainAngle) {
 
         var type = 0, r = 0, d = 0;
         var subtype = map[letter];
-        var nLines = [0, 0, 0, 3, 1, 2][subtype - 1];
+        var nLines = [0, 0, 0, 3, 1, 2, 0, 0][subtype - 1];
         if (letter.match("^(b|ch|d|th2|f|g|h)$")) {
             type = 1, r = globalR, d = mcR - r + 1;
             newCircle = new Circle(owner, type, subtype, d, r, angle);
