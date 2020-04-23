@@ -78,9 +78,9 @@ function drawBigRedDot(x, y) { ctx.fillStyle = "red"; drawDot(x, y, 4 + lineWidt
 
 $(document).ready(function() {
     $("input").val(localStorage.getItem("input"));
-
+    console.log("preparing canvas")
     prepareCanvas();
-
+    console.log("creating GUI")
     createGUI();
 
     redraw();
