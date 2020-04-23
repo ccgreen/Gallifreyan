@@ -573,15 +573,15 @@ function generateWord(word, wordL, mcR, dist, mainAngle) {
             type = 1, r = globalR, d = mcR - r + 1;
             newCircle = new Circle(owner, type, subtype, d, r, angle);
         }
-        else if (letter.match("^(j|k|l|m|n|p)$")) {
+        else if (letter.match("^(j|ph|k|l|c|n|p|m)$")) {
             type = 2, r = globalR, d = mcR - r - 5;
             newCircle = new Circle(owner, type, subtype, d, r, angle);
         }
-        else if (letter.match("^(t|sh|r|s|v|w)$")) {
+        else if (letter.match("^(t|wh|sh|r|zh|v|w|s)$")) {
             type = 3, r = globalR * 1.3, d = mcR * 1.1;
             newCircle = new Circle(owner, type, subtype, d, r, angle);
         }
-        else if (letter.match("^(th|y|z|ng|qu|x)$")) {
+        else if (letter.match("^(th|gh|y|z|q|qu|x|ng)$")) {
             type = 4, r = globalR, d = mcR;
             newCircle = new Circle(owner, type, subtype, d, r, angle);
         }
