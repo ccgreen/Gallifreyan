@@ -18,7 +18,7 @@ function prepareCanvas() {
     canvas.setAttribute('width', canvasSize);
     canvas.setAttribute('height', canvasSize + chinBarSize);
     canvas.style.width = "800px";
-    canvas.style.height = "800px";
+    canvas.style.height = "1000px";
     ctx = canvas.getContext("2d");
 
     ctx.lineCap = 'round';
