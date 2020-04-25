@@ -280,11 +280,10 @@ class Circle {
         }
 
         if (this.dots) {  //drawing the dots
+            var r = this.r * dotRadius / 15;
+            var delta = (0.2 * this.owner.r / this.r);
             if(this.isVowel){
-                var tempR = 1 + lineWidth / 2;
-                var dotR = tempR * dotSize / 10;
-                var r = (this.r - 1 - 3 * temR ) * dotRadius / 10;
-                var delta = (0.2 * this.owner.r / this.r);
+                var dotR = 1 + dotSize / 5;
                 drawDot(...pointFromAngle(this, r, this.a + 0), dotR);
                 if(this.dots > 1){
                     drawDot(...pointFromAngle(this, r, this.a + PI), dotR);
@@ -311,10 +310,8 @@ class Circle {
                         break;
                     default:
                 }
-                var tempR = 3 + lineWidth / 2;
-                var dotR = tempR * dotSize / 10;
-                var r = (this.r - 1 - 3 * tempR) * dotRadius / 10;
-                var delta = (0.2 * this.owner.r / this.r);
+                var dotR = 3 + dotSize / 5;
+
                 for (var i = 0; i < this.dots; i++)
                     drawDot(...pointFromAngle(this, r, this.a + delta * (i + shift) + PI), dotR);
             }
