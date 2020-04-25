@@ -16,7 +16,7 @@ function prepareCanvas() {
     canvas = document.getElementById("canvas");
     canvas.onselectstart = function() { return false; }
     canvas.setAttribute('width', canvasSize);
-    canvas.setAttribute('height', canvasSize);
+    canvas.setAttribute('height', canvasSize + chinBarSize);
     canvas.style.width = "800px";
     canvas.style.height = "800px";
     ctx = canvas.getContext("2d");

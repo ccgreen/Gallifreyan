@@ -1,5 +1,6 @@
 "use strict";
 const canvasSize  = 1000.0;               //the image resolution in pixels
+const chinBarSize = 90.0;                 //Extra height for buttons
 const canvasScale = canvasSize / 800.0;   //800=the canvas size on the screen
 const midPoint    = canvasSize / 2.0;     //the (x, y) of the centerpoint
 const outerR      = midPoint * 0.9;       //radius of the outermost circle
@@ -247,7 +248,6 @@ class Circle {
         this.hasGaps = this.type === 1 || this.type === 3;
 
         this.dots = this.isConsonant ? [null, 0, 2, 3, 0, 0, 0, 4, 1][this.subtype] : this.dots;
-        console.log(type, this.type, this.dots);
 
         this.nLines = 0;        //expected number of lines, according to rules
         this.lines = [];
@@ -282,7 +282,7 @@ class Circle {
         if (this.dots) {  //drawing the dots
             if(this.isVowel){
                 var dotR = 1 + lineWidth / 2;
-                var r = this.r - 1 - 3 * dotR
+                var r = (this.r - 1 - 3 * dotR ) * dotSize / 10;
                 var delta = (0.2 * this.owner.r / this.r);
                 drawDot(...pointFromAngle(this, r, this.a + 0), dotR);
                 if(this.dots > 1){
@@ -298,11 +298,20 @@ class Circle {
                     //drawDot(...pointFromAngle(this, r, (i * PI)/2), dotR);
             } else {
                 var shift = -1.5;
-                if(this.dots == 3){
-                    var shift = -1;
+                switch(this.dots){
+                    case 3:
+                        shift = -1;
+                        break;
+                    case 2:
+                        shift = -0.5;
+                        break;
+                    case 1:
+                        shift = 0;
+                        break;
+                    default:
                 }
-                var dotR = 3 + lineWidth / 2;
-                var r = this.r - 1 - 3 * dotR
+                var dotR = (3 + lineWidth / 2);
+                var r = (this.r - 1 - 3 * dotR) * dotSize / 10;
                 var delta = (0.2 * this.owner.r / this.r);
                 for (var i = 0; i < this.dots; i++)
                     drawDot(...pointFromAngle(this, r, this.a + delta * (i + shift) + PI), dotR);
