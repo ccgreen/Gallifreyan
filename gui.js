@@ -34,22 +34,22 @@ class Button {
 function createGUI() {
     buttons.push(new Button(0, 0, 130, "save image", createFinalImage));
     buttons.push(new Button(0, 30, 110, "save SVG", createFinalSVG));
-    buttons.push(new Button(800 - 310, 1000, 110, "line width", function() { }));
-    buttons.push(new Button(800 - 310, 1030, 110, "dot size", function() { }));
-    buttons.push(new Button(800 - 310, 1060, 110, "red dots", function() {dirtyRender = !dirtyRender; redraw(); }));
-    buttons.push(new Button(800 - 140, 1000, 140, "delete line", function() { deleteLineMode = true; redraw(); }));
-    buttons.push(new Button(800 - 140, 1030, 140, "add line", function() { addNewLine(); redraw(); }));
-    buttons.push(new Button(800 - 140, 1060, 140, "toggle curve", function() { convertLineMode = true; redraw(); }));
-    buttons.push(new Button(800 - 200, 1000, 30, "+",
+    buttons.push(new Button(800 - 310, 0, 110, "line width", function() { }));
+    buttons.push(new Button(800 - 310, 30, 110, "dot size", function() { }));
+    buttons.push(new Button(800 - 310, 60, 310, "toggle red dots", function() {dirtyRender = !dirtyRender; redraw(); }));
+    buttons.push(new Button(800 - 140, 800 - 90, 140, "delete line", function() { deleteLineMode = true; redraw(); }));
+    buttons.push(new Button(800 - 140, 800 - 60, 140, "add line", function() { addNewLine(); redraw(); }));
+    buttons.push(new Button(800 - 140, 800 - 30, 140, "toggle curve", function() { convertLineMode = true; redraw(); }));
+    buttons.push(new Button(800 - 200, 0, 30, "+",
         function() { lineWidth += 0.5; redraw(); }
     ));
-    buttons.push(new Button(800 - 170, 1000, 30, "−",
+    buttons.push(new Button(800 - 170, 0, 30, "−",
         function() { lineWidth -= 0.5; if (lineWidth < 0.5) lineWidth = 0.5; redraw(); }
     ));
-    buttons.push(new Button(800 - 200, 1030, 30, "+",
+    buttons.push(new Button(800 - 200, 30, 30, "+",
         function() { dotSize += 0.5; redraw(); }
     ));
-    buttons.push(new Button(800 - 170, 1030, 30, "−",
+    buttons.push(new Button(800 - 170, 30, 30, "−",
         function() { dotSize -= 0.5; if (dotSize < 0.5) dotSize = 0.5; redraw(); }
     ));
     b
