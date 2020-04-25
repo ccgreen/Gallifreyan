@@ -5,6 +5,7 @@ const midPoint    = canvasSize / 2.0;     //the (x, y) of the centerpoint
 const outerR      = midPoint * 0.9;       //radius of the outermost circle
 const PI = Math.PI;
 var lineWidth   = 3.0 * canvasScale;
+var dotSize     = 10 * canvasScale;
 
 var allCircles      = [],
     currentCircle   = null, //points to a wordCircle which contains selectedCircle
@@ -228,7 +229,16 @@ class Circle {
     constructor(owner, type, subtype, d, r, a) {
         this.owner = owner;
         this.children = [];
-        this.type = type; this.subtype = subtype;
+        this.dots = 0;
+        if(type >= 10){
+            this.type = type % 10;
+            this.dots = Math.floor(type/10);
+        } else {
+            this.type = type;
+            this.dots = 0;
+        }
+        this.subtype = subtype;
+
 
         // currently only word circles lay on main circle; this may change in the future
         this.isWordCircle = owner == allCircles[0];
@@ -236,7 +246,8 @@ class Circle {
         this.isConsonant = ! this.isVowel;
         this.hasGaps = this.type === 1 || this.type === 3;
 
-        this.dots = this.isConsonant ? [null, 0, 2, 3, 0, 0, 0, 4, 1][this.subtype] : 0;
+        this.dots = this.isConsonant ? [null, 0, 2, 3, 0, 0, 0, 4, 1][this.subtype] : this.dots;
+        console.log(type, this.type, this.dots);
 
         this.nLines = 0;        //expected number of lines, according to rules
         this.lines = [];
@@ -269,11 +280,33 @@ class Circle {
         }
 
         if (this.dots) {  //drawing the dots
-            var dotR = 3 + lineWidth / 2;
-            var r = this.r - 1 - 3 * dotR
-            var delta = (0.2 * this.owner.r / this.r);
-            for (var i = -1; i < this.dots - 1; i++)
-                drawDot(...pointFromAngle(this, r, this.a + delta * i + PI), dotR);
+            if(this.isVowel){
+                var dotR = 1 + lineWidth / 2;
+                var r = this.r - 1 - 3 * dotR
+                var delta = (0.2 * this.owner.r / this.r);
+                drawDot(...pointFromAngle(this, r, this.a + 0), dotR);
+                if(this.dots > 1){
+                    drawDot(...pointFromAngle(this, r, this.a + PI), dotR);
+                    if(this.dots > 2){
+                        drawDot(...pointFromAngle(this, r, this.a + PI / 2), dotR);
+                        if(this.dots > 3){
+                            drawDot(...pointFromAngle(this, r, this.a + 3 * PI / 2), dotR);
+                        }
+                    }
+                }
+                //for (var i = 0; i < this.dots; i++)
+                    //drawDot(...pointFromAngle(this, r, (i * PI)/2), dotR);
+            } else {
+                var shift = -1.5;
+                if(this.dots == 3){
+                    var shift = -1;
+                }
+                var dotR = 3 + lineWidth / 2;
+                var r = this.r - 1 - 3 * dotR
+                var delta = (0.2 * this.owner.r / this.r);
+                for (var i = 0; i < this.dots; i++)
+                    drawDot(...pointFromAngle(this, r, this.a + delta * (i + shift) + PI), dotR);
+            }
         }
         if (dirtyRender && this.selectable)
             drawRedDot(this.x, this.y);
@@ -539,9 +572,9 @@ function generateWords(words) {
 
 //assigns the subtype
 var map = {
-    "b": 1, 	"ch": 2, 	"d": 3, 	"f": 4, 	"g": 5, 	"h": 6, "th2": 7,
+    "b": 1, 	"ch": 2, 	"d": 3, 	"f": 4, 	"g": 5, 	"h": 6, "zh": 7,
     "j": 1, 	"k": 2, 	"l": 3, 	"m": 4, 	"n": 5, 	"p": 6, "c": 7,		"ph": 8,
-    "t": 1, 	"sh": 2, 	"r": 3, 	"s": 4, 	"v": 5, 	"w": 6,	"zh":7,		"wh": 8,
+    "t": 1, 	"sh": 2, 	"r": 3, 	"s": 4, 	"v": 5, 	"w": 6,	"th2":7,		"wh": 8,
     "th": 1, 	"y": 2, 	"z": 3, 	"ng": 4, 	"qu": 5, 	"x": 6,	"q": 7,		"gh": 8,
     "a": 1, 	"e": 2, 	"i": 3, 	"o": 4, 	"u": 5,
     "a1": 1,	"e1": 2,	"i1": 3,	"o1": 4,	"u1": 5,
@@ -569,7 +602,7 @@ function generateWord(word, wordL, mcR, dist, mainAngle) {
         var type = 0, r = 0, d = 0;
         var subtype = map[letter];
         var nLines = [0, 0, 0, 3, 1, 2, 0, 0][subtype - 1];
-        if (letter.match("^(b|ch|d|th2|f|g|h)$")) {
+        if (letter.match("^(b|ch|d|zh|f|g|h)$")) {
             type = 1, r = globalR, d = mcR - r + 1;
             newCircle = new Circle(owner, type, subtype, d, r, angle);
         }
@@ -577,7 +610,7 @@ function generateWord(word, wordL, mcR, dist, mainAngle) {
             type = 2, r = globalR, d = mcR - r - 5;
             newCircle = new Circle(owner, type, subtype, d, r, angle);
         }
-        else if (letter.match("^(t|wh|sh|r|zh|v|w|s)$")) {
+        else if (letter.match("^(t|wh|sh|r|th2|v|w|s)$")) {
             type = 3, r = globalR * 1.3, d = mcR * 1.1;
             newCircle = new Circle(owner, type, subtype, d, r, angle);
         }
@@ -588,10 +621,8 @@ function generateWord(word, wordL, mcR, dist, mainAngle) {
         else if (letter.match("^(a|e|i|o|u|[aeiou][1-5])$")) {
             var dots = 0;
             if(letter.match("^([aeiou][1-5])$")){
-                console.log(letter.substring(1,2));
                 dots = letter.substring(1,2);
-                Number(dots);
-                console.log(dots);
+                dots--;
             }
 
             nLines = [0, 0, 1, 0, 1][subtype - 1];
@@ -600,12 +631,14 @@ function generateWord(word, wordL, mcR, dist, mainAngle) {
 
             if (previous && subtype != 4 && previous.type === 3) {  //let's not attach to this as floating letters look ugly
                 type = 5, d = mcR;
+                type = dots * 10 + type;
                 angle += delta / 2;
                 newCircle = new Circle(owner, type, subtype, owner.r, r, angle);
                 angle += delta / 2;
             }
             else if (previous && previous.isConsonant && previous.children.length === 0) {   //are we free to attach?
                 type = 6;
+                type = dots * 10 + type;
                 owner = previous;
                 angle += delta;
                 newCircle = new Circle(owner, type, subtype, owner.r / 2, r, owner.a + PI + PI / 8);
@@ -613,6 +646,7 @@ function generateWord(word, wordL, mcR, dist, mainAngle) {
             }
             else {  //let's just add this normally then.
                 type = 5, d = mcR;
+                type = dots * 10 + type;
                 newCircle = new Circle(owner, type, subtype, owner.r, r, angle);
             }
         }
