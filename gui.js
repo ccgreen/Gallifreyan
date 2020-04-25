@@ -1,6 +1,5 @@
 "use strict";
 const buttons = [];
-const mode = "checkLines";
 
 class Button {
     constructor(x, y, width, text, f) {
@@ -70,10 +69,9 @@ function drawGUI() {
     for (let button of buttons) {
         button.draw();
     }
-    switch(mode){
-        case "checklines":
-        case default:
-            GUIText("are lines correct?: " + (checkLines() ? "yes" : "no"));
-            break;
+    if(selectedCircle != null){
+        GUIText("Scroll to change circle size");
+    } else {
+        GUIText("are lines correct?: " + (checkLines() ? "yes" : "no"));
     }
 }
