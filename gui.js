@@ -32,11 +32,12 @@ class Button {
 }
 
 function createGUI() {
-    buttons.push(new Button(0, 0, 130, "save image", createFinalImage));
-    buttons.push(new Button(0, 30, 110, "save SVG", createFinalSVG));
+    buttons.push(new Button(0, 0, 130, "toggle gui", function() {dirtyRender = !dirtyRender; redraw(); }));
+    buttons.push(new Button(0, 30, 130, "save image", createFinalImage));
+    buttons.push(new Button(0, 60, 110, "save SVG", createFinalSVG));
     buttons.push(new Button(800 - 170, 0, 110, "line width", function() { }));
     buttons.push(new Button(800 - 170, 30, 110, "dot size", function() { }));
-    buttons.push(new Button(800 - 170, 60, 170, "toggle red dots", function() {dirtyRender = !dirtyRender; redraw(); }));
+    buttons.push(new Button(800 - 170, 60, 110, "dot radius", function() { }));
     buttons.push(new Button(800 - 140, 800 - 90, 140, "delete line", function() { deleteLineMode = true; redraw(); }));
     buttons.push(new Button(800 - 140, 800 - 60, 140, "add line", function() { addNewLine(); redraw(); }));
     buttons.push(new Button(800 - 140, 800 - 30, 140, "toggle curve", function() { convertLineMode = true; redraw(); }));
@@ -52,7 +53,12 @@ function createGUI() {
     buttons.push(new Button(800 - 30, 30, 30, "−",
         function() { dotSize -= 0.5; if (dotSize < 0.5) dotSize = 0.5; redraw(); }
     ));
-    b
+    buttons.push(new Button(800 - 60, 60, 30, "+",
+        function() { dotRadius += 0.5; redraw(); }
+    ));
+    buttons.push(new Button(800 - 30, 60, 30, "−",
+        function() { dotRadius -= 0.5; if (dotRadius < 0.5) dotRadius = 0.5; redraw(); }
+    ));
 }
 
 function drawGUI() {

@@ -6,6 +6,7 @@ const outerR      = midPoint * 0.9;       //radius of the outermost circle
 const PI = Math.PI;
 var lineWidth   = 3.0 * canvasScale;
 var dotSize     = 10 * canvasScale;
+var dotRadius   = 10 * canvasScale;
 
 var allCircles      = [],
     currentCircle   = null, //points to a wordCircle which contains selectedCircle
@@ -280,8 +281,9 @@ class Circle {
 
         if (this.dots) {  //drawing the dots
             if(this.isVowel){
-                var dotR = 1 + lineWidth / 2;
-                var r = (this.r - 1 - 3 * dotR ) * dotSize / 10;
+                var tempR = 1 + lineWidth / 2;
+                var dotR = tempR * dotSize / 10;
+                var r = (this.r - 1 - 3 * temR ) * dotRadius / 10;
                 var delta = (0.2 * this.owner.r / this.r);
                 drawDot(...pointFromAngle(this, r, this.a + 0), dotR);
                 if(this.dots > 1){
@@ -309,8 +311,9 @@ class Circle {
                         break;
                     default:
                 }
-                var dotR = (3 + lineWidth / 2);
-                var r = (this.r - 1 - 3 * dotR) * dotSize / 10;
+                var tempR = 3 + lineWidth / 2;
+                var dotR = tempR * dotSize / 10;
+                var r = (this.r - 1 - 3 * tempR) * dotRadius / 10;
                 var delta = (0.2 * this.owner.r / this.r);
                 for (var i = 0; i < this.dots; i++)
                     drawDot(...pointFromAngle(this, r, this.a + delta * (i + shift) + PI), dotR);
