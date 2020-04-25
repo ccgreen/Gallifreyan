@@ -531,8 +531,18 @@ $("canvas").mousewheel(function(event, delta, deltaX, deltaY) {
             selected.r = selected.r.clamp(selected.owner.r * 0.1, Infinity);
 
         for (var child of selected.children) {
+            var ColdR = child.r;
             child.r *= (selected.r / oldR);
             child.update(child.d * (selected.r / oldR), child.a);
+            for (var grandChild of child.children){
+                var GColdR = grandChild.r;
+                grandChild.r *= (child.r / ColdR);
+                grandChild.update(grandChild.d * (child.r / ColdR), grandChild.a);
+                for( var greatGrandChild of grandChild.children){
+                    greatGrandChild.r *= (grandChild.r / GColdR);
+                    greatGrandChild.update(greatGrandChild.d * (grandChild.r / GColdR), greatGrandChild.a);
+                }
+            }
         }
         correctCircleLocation(selected, selected.d, selected.a);
         redraw();
