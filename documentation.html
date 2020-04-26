@@ -1,0 +1,317 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Sherman's + Unifon</title>
+  <meta name="description" content="Documentation for Sherman's Circular Gallifreyan with Unifon support">
+  <meta name="author" content="TheThirdDoor">
+
+	<style>
+	table, th, td {
+	  border: 1px solid black;
+	}
+	table {
+		table-layout: fixed;
+		max-width: 900px;
+	}
+	td, th {
+		width:11%;
+	}
+	img {
+		width: 100%;
+	}
+	.backward_text {
+		display: inline-block;
+		-moz-transform: scale(1, -1);
+		-webkit-transform: scale(1, -1);
+		transform: scale(1, -1);
+	}
+</style>
+
+</head>
+
+<body>
+	<h1>Sherman's + Unifon</h1>
+	<p>TLDR: There's a tool <a href="https://ccgreen.github.io/Gallifreyan/">here</a> for translating English to Circular Gallifreyan it mostly uses Sherman's Circular Gallifreyan but has the additional characters 'ing2', 'th2', 'zh', 'a1', 'a2', 'e1', 'e2', 'i1', 'o1', 'o2', 'o3', 'o4, 'u1', and 'u2', each of which represents a certain sound.</p>
+	<h2>Introduction:</h2>
+	<p>Circular Gallifreyan is a fictional language from the British television program Doctor Who, both of which are © BBC. However the Circular Gallifreyan used in Doctor Who while very pretty are absolute gibberish; because of this fans of the show have over the years created their own versions of Circular Gallifreyan, the most popular of which is Sherman’s Gallifreyan: to learn more, visit <a href="www.shermansplanet.com/gallifreyan">www.shermansplanet.com/gallifreyan</a></p>
+	<p>Unifon is an alphabet for the spoken english language which adds additional characters such as <span class="backward_text">Z</span> and simplifies other characters such as G always being a hard G such as in Go and J always being soft such as in Jam. You can find out more about Unifon <a href="http://www.unifon.org/">here.</a></p>
+	<p>This modification of Sherman's Gallifreyan is purely additive, none of the original characters have been removed or replaced, and the tool linked below which uses this modification will return Sherman compatable Gallifreyan unless one of the new characters is used.</p>
+	<p>This guide is meant to be used after the guide for Sherman's Gallifreyan as this is meant as a supplement. The guide for Sherman's can be found <a href="https://shermansplanet.com/gallifreyan/guide.pdf">here.</a>
+	<h2>The alphabet</h2>
+	<h3>Consonants</h3>
+	<h4>Sherman's consonants</h4>
+	<img style="width:800px" src="docs/Shermans Consonents.png" alt="Sherman's circular gallifreyan consonants">
+	<h4>Sherman's + Unifon Consonants</h4>
+	<p>Each of these is given with their English name, unifon character (if applicable), and the sound the make.</p>
+	<table>
+		<tr>
+			<th></th>
+			<th></th>
+			<th>•</th>
+			<th>• •</th>
+			<th>• • •</th>
+			<th>• • • •</th>
+			<th>|</th>
+			<th>| |</th>
+			<th>| | |</th>
+		</tr>
+		<tr>
+			<th rowspan="3"><img src="docs/Consonant table row 1.png" alt="Circular Gallifreyan 'B'"></th>
+			<td>B</td>
+			<td>Ing2</td>
+			<td>Ch</td>
+			<td>D</td>
+			<td>Zh</td>
+			<td>G</td>
+			<td>H</td>
+			<td>F</td>
+		</tr>
+		<tr>
+			<td>B</td>
+			<td>|/𝖩</td>
+			<td>Ȼ</td>
+			<td>D</td>
+			<td><span class="backward_text">Z</span></td>
+			<td>G</td>
+			<td>H</td>
+			<td>F</td>
+		</tr>
+		<tr>
+			<td><span style="font-weight:bold">B</span>an</td>
+			<td>s<span style="font-weight:bold">ING</span></td>
+			<td><span style="font-weight:bold">CH</span>um</td>
+			<td><span style="font-weight:bold">D</span>ig</td>
+			<td>lu<span style="font-weight:bold">X</span>urious</td>
+			<td><span style="font-weight:bold">G</span>o</td>
+			<td><span style="font-weight:bold">H</span>ome</td>
+			<td><span style="font-weight:bold">F</span>ly</td>
+		</tr>
+		<tr>
+			<th rowspan="3"><img src="docs/Consonant table row 2.png" alt="Circular Gallifreyan 'J'"></th>
+			<td>J</td>
+			<td>Ph</td>
+			<td>K</td>
+			<td>L</td>
+			<td>C</td>
+			<td>N</td>
+			<td>P</td>
+			<td>M</td>
+		</tr>
+		<tr>
+			<td>J</td>
+			<td></td>
+			<td>K</td>
+			<td>L</td>
+			<td></td>
+			<td>N</td>
+			<td>P</td>
+			<td>M</td>
+		</tr>
+		<tr>
+			<td><span style="font-weight:bold">J</span>am</td>
+			<td></td>
+			<td><span style="font-weight:bold">K</span>iss</td>
+			<td><span style="font-weight:bold">L</span>ie</td>
+			<td></td>
+			<td><span style="font-weight:bold">N</span>o</td>
+			<td><span style="font-weight:bold">P</span>un</td>
+			<td><span style="font-weight:bold">M</span>y</td>
+		</tr>
+		<tr>
+			<th rowspan="3"><img src="docs/Consonant table row 3.png" alt="Circular Gallifreyan 'T'"></th>
+			<td>T</td>
+			<td>Wh</td>
+			<td>Sh</td>
+			<td>R</td>
+			<td>Th2</td>
+			<td>V</td>
+			<td>W</td>
+			<td>S</td>
+		</tr>
+		<tr>
+			<td>T</td>
+			<td></td>
+			<td>$</td>
+			<td>R</td>
+			<td>Ћ</td>
+			<td>V</td>
+			<td>W</td>
+			<td>S</td>
+		</tr>
+		<tr>
+			<td><span style="font-weight:bold">T</span>on</td>
+			<td></td>
+			<td><span style="font-weight:bold">SH</span>un</td>
+			<td><span style="font-weight:bold">R</span>un</td>
+			<td><span style="font-weight:bold">TH</span>ing</td>
+			<td><span style="font-weight:bold">V</span>ery</td>
+			<td><span style="font-weight:bold">W</span>it</td>
+			<td><span style="font-weight:bold">S</span>un</td>
+		</tr>
+		<tr>
+			<th rowspan="3"><img src="docs/Consonant table row 4.png" alt="Circular Gallifreyan 'TH'"></th>
+			<td>Th</td>
+			<td>Gh</td>
+			<td>Y</td>
+			<td>Z</td>
+			<td>Q</td>
+			<td>Qu</td>
+			<td>X</td>
+			<td>Ng</td>
+		</tr>
+		<tr>
+			<td>𝈥̄</td>
+			<td></td>
+			<td>Y</td>
+			<td>Z</td>
+			<td></td>
+			<td></td>
+			<td>X</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><span style="font-weight:bold">TH</span>e</td>
+			<td></td>
+			<td><span style="font-weight:bold">Y</span>es</td>
+			<td><span style="font-weight:bold">Z</span>ebra</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+	</table>
+	<p>As you may see, there are only three new characters added to this table to fill in the blanks that Sherman had left: 'Ing2', 'Zh', and 'Th2' (note the '2' in Ing2 and Th2 are just there for use with the tool linked below). In Unifon hard 'C's such as in Candle are written as 'K's and soft 'C's such as in sinCe are written as 'S's, however this was already true in Sherman's Gallifreyan</p>
+	<h3>Vowels</h3>
+	<h4>Sherman’s vowels</h4>
+	<img style="width:600px" src="docs/Vowels1.png" alt="Base forms for each vowel">
+	<p>Like the consonants these vowels remain unchanged, and they still combine with consonants like before</p>
+	<h4>Sherman's + Unifon Consonants</h4>
+	<p>This system adds extra vowels based on the sounds they make and they can be used instead of or as well as the diacratic marks</p>
+	<table>
+		<tr>
+			<th></th>
+			<th></th>
+			<th>• •</th>
+			<th>• • • •</th>
+			<th>•</th>
+			<th>• • •</th>
+		</tr>
+		<tr>
+			<th rowspan="3"><span>A</span></th>
+			<td>A</td>
+			<td>A1</td>
+			<td>A2</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			
+			<td>A</td>
+			<td>Δ</td>
+			<td>Ʌ</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><span style="font-weight:bold">A</span>dd</td>
+			<td><span style="font-weight:bold">A</span>le</td>
+			<td><span style="font-weight:bold">A</span>ll</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<th rowspan="3"><span>E</span></th>
+			<td>E</td>
+			<td>E1</td>
+			<td>E2</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			
+			<td>E</td>
+			<td>ƎE</td>
+			<td>ƎR</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><span style="font-weight:bold">E</span>very</td>
+			<td><span style="font-weight:bold">E</span>vil</td>
+			<td>h<span style="font-weight:bold">E</span>r</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<th rowspan="3"><span>I</span></th>
+			<td>I</td>
+			<td>I1</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>	
+			<td>I</td>
+			<td>±</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><span style="font-weight:bold">I</span>i</td>
+			<td><span style="font-weight:bold">I</span>ce</td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<th rowspan="3"><span>O</span></th>
+			<td>O</td>
+			<td>O1</td>
+			<td>O2</td>
+			<td>O3</td>
+			<td>O4</td>
+		</tr>
+		<tr>
+			<td>O</td>
+			<td>𐍉</td>
+			<td>ⵀ</td>
+			<td>ꐎ</td>
+			<td><span class="backward_text">ꐎ</span></td>
+		</tr>
+		<tr>
+			<td>g<span style="font-weight:bold">O</span>t</td>
+			<td><span style="font-weight:bold">O</span>ver</td>
+			<td>b<span style="font-weight:bold">OO</span>k</td>
+			<td>n<span style="font-weight:bold">OW</span></td>
+			<td>t<span style="font-weight:bold">OY</span></td>
+		</tr>
+		<tr>
+			<th rowspan="3"><span>U</span></th>
+			<td>U</td>
+			<td>U1</td>
+			<td>U2</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>U</td>
+			<td><span class="backward_text">⩃</span></td>
+			<td>⩌</td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr>
+			<td><span style="font-weight:bold">U</span>p</td>
+			<td><span style="font-weight:bold">YOU</span></td>
+			<td>n<span style="font-weight:bold">EW</span></td>
+			<td></td>
+			<td></td>
+		</tr>
+	</table>
+	<p>For all of this there's a tool <a href="https://ccgreen.github.io/Gallifreyan/">here</a> for translating English to Circular Gallifreyan that uses Sherman's + Unifon, Unifon characters can be added using their english versions from the above tables e.g. Ћ is entered as th2, <span class="backward_text">⩃</span> as U1, and <span class="backward_text">Z</span> as zh.</p>
+</body>
+</html>

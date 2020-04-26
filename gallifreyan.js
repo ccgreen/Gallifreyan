@@ -100,7 +100,10 @@ function updateText() {
     for (var toParse of text) {
         var word = [];
         for (var i = 0; i < toParse.length; i++) {
-            if (toParse.substring(i, i + 3).match("(th2)")) {
+            if (toParse.substring(i, i + 4).match("(ing2)")){
+                word.push(toParse.substring(i, i + 4));
+                i = i + 3;
+            } else if (toParse.substring(i, i + 3).match("(th2)")) {
                 word.push(toParse.substring(i, i + 3));
                 i = i + 2;
 			} else if (toParse.substring(i, i + 2).match("(ch|sh|th|ng|qu|zh|ph|wh|gh|[aeiou][1-5])")) {
@@ -233,7 +236,22 @@ class Circle {
         this.dots = 0;
         if(type >= 10){
             this.type = type % 10;
-            this.dots = Math.floor(type/10);
+            var dots = Math.floor(type/10);
+            switch(dots){
+                default:
+                case 1:
+                    this.dots = 2;
+                    break;
+                case 2:
+                    this.dots = 4;
+                    break;
+                case 3:
+                    this.dots = 1;
+                    break;
+                case 4:
+                    this.dots = 3;
+                    break;
+            }
         } else {
             this.type = type;
             this.dots = 0;
@@ -284,18 +302,20 @@ class Circle {
             var delta = (0.2 * this.owner.r / this.r);
             if(this.isVowel){
                 var dotR = 1 + dotSize / 5;
-                drawDot(...pointFromAngle(this, r, this.a + 0), dotR);
-                if(this.dots > 1){
-                    drawDot(...pointFromAngle(this, r, this.a + PI), dotR);
-                    if(this.dots > 2){
+                switch (this.dots){
+                    case 4:
+                        drawDot(...pointFromAngle(this, r, this.a + PI), dotR);
+                    case 3:
+                        drawDot(...pointFromAngle(this, r, this.a + 0), dotR);
+                    case 2:
+                        drawDot(...pointFromAngle(this, r, this.a + 3 * PI / 2), dotR);
                         drawDot(...pointFromAngle(this, r, this.a + PI / 2), dotR);
-                        if(this.dots > 3){
-                            drawDot(...pointFromAngle(this, r, this.a + 3 * PI / 2), dotR);
-                        }
-                    }
+                        break;
+                    default:
+                    case 1:
+                        drawDot(...pointFromAngle(this, r, this.a + 0), dotR);
+                        break;
                 }
-                //for (var i = 0; i < this.dots; i++)
-                    //drawDot(...pointFromAngle(this, r, (i * PI)/2), dotR);
             } else {
                 var shift = -1.5;
                 switch(this.dots){
@@ -590,10 +610,10 @@ function generateWords(words) {
 
 //assigns the subtype
 var map = {
-    "b": 1, 	"ch": 2, 	"d": 3, 	"f": 4, 	"g": 5, 	"h": 6, "zh": 7,
-    "j": 1, 	"k": 2, 	"l": 3, 	"m": 4, 	"n": 5, 	"p": 6, "c": 7,		"ph": 8,
-    "t": 1, 	"sh": 2, 	"r": 3, 	"s": 4, 	"v": 5, 	"w": 6,	"th2":7,		"wh": 8,
-    "th": 1, 	"y": 2, 	"z": 3, 	"ng": 4, 	"qu": 5, 	"x": 6,	"q": 7,		"gh": 8,
+    "b": 1, 	"ch": 2, 	"d": 3, 	"f": 4, 	"g": 5, 	"h": 6, "zh": 7,    "ing2": 8,
+    "j": 1, 	"k": 2, 	"l": 3, 	"m": 4, 	"n": 5, 	"p": 6, "c": 7,	    "ph": 8,
+    "t": 1, 	"sh": 2, 	"r": 3, 	"s": 4, 	"v": 5, 	"w": 6,	"th2":7,    "wh": 8,
+    "th": 1, 	"y": 2, 	"z": 3, 	"ng": 4, 	"qu": 5, 	"x": 6,	"q": 7,     "gh": 8,
     "a": 1, 	"e": 2, 	"i": 3, 	"o": 4, 	"u": 5,
     "a1": 1,	"e1": 2,	"i1": 3,	"o1": 4,	"u1": 5,
 	"a2": 1,	"e2": 2,	"i2": 3,	"o2": 4,	"u2": 5,
@@ -620,7 +640,7 @@ function generateWord(word, wordL, mcR, dist, mainAngle) {
         var type = 0, r = 0, d = 0;
         var subtype = map[letter];
         var nLines = [0, 0, 0, 3, 1, 2, 0, 0][subtype - 1];
-        if (letter.match("^(b|ch|d|zh|f|g|h)$")) {
+        if (letter.match("^(b|ing2|ch|d|zh|f|g|h)$")) {
             type = 1, r = globalR, d = mcR - r + 1;
             newCircle = new Circle(owner, type, subtype, d, r, angle);
         }
@@ -641,6 +661,7 @@ function generateWord(word, wordL, mcR, dist, mainAngle) {
             if(letter.match("^([aeiou][1-5])$")){
                 dots = letter.substring(1,2);
                 dots--;
+                dots++;
             }
 
             nLines = [0, 0, 1, 0, 1][subtype - 1];
