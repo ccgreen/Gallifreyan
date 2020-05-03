@@ -15,15 +15,16 @@ var canvas, ctx, mousedown = false, mousemove = 0;
 function prepareCanvas() {
     canvas = document.getElementById("canvas");
     canvas.onselectstart = function() { return false; }
-    canvas.setAttribute('width', canvasSize);
+    canvas.setAttribute('width', canvasSize + sideBarWidth * 2);
     canvas.setAttribute('height', canvasSize);
-    canvas.style.width = "800px";
+    canvas.style.width = "1200px";
     canvas.style.height = "800px";
     ctx = canvas.getContext("2d");
 
+
     ctx.lineCap = 'round';
 
-    scrollerObj.setDimensions(800, 800, 800, 800);	//I'm almost certain that I'm doing this the wrong way, but somehow it works flawlessly
+    scrollerObj.setDimensions(1300, 800, 1300, 800);	//I'm almost certain that I'm doing this the wrong way, but somehow it works flawlessly
     scrollerObj.setPosition($('canvas').position().left, $('canvas').position().top);
 
     canvas.addEventListener("mousedown", function(e) {
@@ -85,9 +86,11 @@ function download(extension, href) {
 
 function createFinalSVG() {
     dirtyRender = false;
+    drawRender = true;
 
     let oldctx = ctx;
     ctx = new C2S(canvasSize, canvasSize);
+
     redraw();
     let svg = ctx.getSerializedSvg();
     ctx = oldctx;
@@ -95,15 +98,20 @@ function createFinalSVG() {
     download('svg', 'data:image/svg+xml; charset=utf8, ' + encodeURIComponent(svg));
 
     dirtyRender = true;
+    drawRender = false;
     redraw();
 }
 
 function createFinalImage() {
     dirtyRender = false;
+    drawRender = true;
+    canvas.setAttribute('width', canvasSize);
     redraw();
 
     download('png', canvas.toDataURL());
 
     dirtyRender = true;
+    drawRender = false;
+    canvas.setAttribute('width', canvasSize + sideBarWidth * 2);
     redraw();
 }

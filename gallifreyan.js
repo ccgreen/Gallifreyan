@@ -1,8 +1,9 @@
 "use strict";
 const canvasSize  = 1000.0;               //the image resolution in pixels
 const canvasScale = canvasSize / 800.0;   //800=the canvas size on the screen
+const sideBarWidth = 250.0;            //Size of the sidebars
 const midPoint    = canvasSize / 2.0;     //the (x, y) of the centerpoint
-const outerR      = midPoint * 0.9;       //radius of the outermost circle
+const outerR      = midPoint * 0.95;       //radius of the outermost circle
 const PI = Math.PI;
 var lineWidth   = 3.0 * canvasScale;
 var dotSize     = 10 * canvasScale;
@@ -18,6 +19,7 @@ var lines           = [],
     lineEnd         = 0;    //tells which end of the line is selected
 
 var dirtyRender     = true; //whether GUI and red dots will be drawn
+var drawRender       = false;//whether to render in center or over to the left
 
 var deleteLineMode  = false;//whether next selected line will be deleted
 
@@ -67,11 +69,11 @@ function angleBetweenCircles(circle, second) {
 }
 
 //since we are drawing mostly circles, it's not like we need control over beginPath() and stroke() anyway
-function drawCircle(x, y, r) { ctx.beginPath(); ctx.arc(x, y, r, 0, PI * 2); ctx.stroke(); }
-function drawArc(x, y, r, a1, a2) { ctx.beginPath(); ctx.arc(x, y, r, a1, a2); ctx.stroke(); }
-function drawBezier(x1, y1, x2, y2, ax1, ay1, ax2, ay2) { ctx.beginPath(); ctx.moveTo(x1, y1); ctx.bezierCurveTo(ax1, ay1, ax2, ay2, x2, y2); ctx.stroke(); }
-function drawLine(x1, y1, x2, y2) { ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); }
-function drawDot(x, y, r) { ctx.beginPath(); ctx.arc(x, y, r, 0, PI * 2); ctx.fill(); }
+function drawCircle(x, y, r) { if(drawRender){x -= sideBarWidth;} ctx.beginPath(); ctx.arc(x, y, r, 0, PI * 2); ctx.stroke(); }
+function drawArc(x, y, r, a1, a2) { if(drawRender){x -= sideBarWidth;} ctx.beginPath(); ctx.arc(x, y, r, a1, a2); ctx.stroke(); }
+function drawBezier(x1, y1, x2, y2, ax1, ay1, ax2, ay2) { if(drawRender){x1 -= sideBarWidth; x2 -= sideBarWidth; ax1 -= sideBarWidth; ax2 -= sideBarWidth;}ctx.beginPath(); ctx.moveTo(x1, y1); ctx.bezierCurveTo(ax1, ay1, ax2, ay2, x2, y2); ctx.stroke(); }
+function drawLine(x1, y1, x2, y2) { if(drawRender){x1 -= sideBarWidth; x2 -= sideBarWidth;} ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); }
+function drawDot(x, y, r) { if(drawRender){x -= sideBarWidth;} ctx.beginPath(); ctx.arc(x, y, r, 0, PI * 2); ctx.fill(); }
 
 //draws a red dot in a given location, signifying a circle you can select
 function drawRedDot(x, y) { ctx.fillStyle = "red"; drawDot(x, y, 3 + lineWidth / 3); ctx.fillStyle = "black"; }
@@ -80,7 +82,7 @@ function drawBigRedDot(x, y) { ctx.fillStyle = "red"; drawDot(x, y, 4 + lineWidt
 
 $(document).ready(function() {
     $("input").val(localStorage.getItem("input"));
-    console.log("preparing canvas")
+    console.log("preparing canvases")
     prepareCanvas();
     console.log("creating GUI")
     createGUI();
@@ -583,7 +585,7 @@ function drawAngles() {
 
 //generates the sentence
 function generateWords(words) {
-    allCircles.push(new Circle({ x: midPoint, y: midPoint, a: 0 }, 4, 0, 0, outerR, 0));
+    allCircles.push(new Circle({ x: midPoint + sideBarWidth, y: midPoint, a: 0 }, 4, 0, 0, outerR, 0));
     allCircles[0].selectable = false;
 
     var delta = 2 * PI / words.length;
@@ -819,7 +821,7 @@ function checkLines() {
 //the core drawing routine
 function redraw() {
     ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.clearRect(0, 0, canvasSize, canvasSize);
+    ctx.clearRect(0, 0, canvasSize + sideBarWidth + sideBarWidth, canvasSize);
 
     var data = scrollerObj.getValues();
     ctx.setTransform(data.zoom, 0, 0, data.zoom, -data.left * canvasScale, -data.top * canvasScale);
@@ -834,5 +836,6 @@ function redraw() {
     if (selectedCircle != null && selectedCircle.type != 6) drawAngles();
 
     ctx.setTransform(1, 0, 0, 1, 0, 0);
-    if (dirtyRender) { drawGUI(); }
+
+    drawGUI();
 }
