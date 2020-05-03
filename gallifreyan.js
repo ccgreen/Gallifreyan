@@ -2,6 +2,7 @@
 const canvasSize  = 1000.0;               //the image resolution in pixels
 const canvasScale = canvasSize / 800.0;   //800=the canvas size on the screen
 const sideBarWidth = 250.0;            //Size of the sidebars
+const rightSideBar = (sideBarWidth + canvasSize) / canvasScale;
 const midPoint    = canvasSize / 2.0;     //the (x, y) of the centerpoint
 const outerR      = midPoint * 0.95;       //radius of the outermost circle
 const PI = Math.PI;
