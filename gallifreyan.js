@@ -825,7 +825,9 @@ function redraw() {
     ctx.clearRect(0, 0, canvasSize + sideBarWidth + sideBarWidth, canvasSize);
 
     var data = scrollerObj.getValues();
-    ctx.setTransform(data.zoom, 0, 0, data.zoom, -data.left * canvasScale, -data.top * canvasScale);
+    if(!drawRender){
+        ctx.setTransform(data.zoom, 0, 0, data.zoom, -data.left * canvasScale, -data.top * canvasScale);
+    }
 
     ctx.lineWidth = lineWidth;
     for (var circle of allCircles)
