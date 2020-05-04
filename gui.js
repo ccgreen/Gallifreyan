@@ -1,6 +1,9 @@
 "use strict";
 const buttons = [];
+const simpleButtons = [];
+const advancedButtons = [];
 var showGUI = true;
+var simpleGUI = true;
 
 class Button {
     constructor(x, y, width, text, f) {
@@ -39,36 +42,29 @@ class Button {
 }
 
 function createGUI() {
-    //Left main GUI
+    //main GUI
     buttons.push(new Button(0, 0, 130, "toggle gui", function() {showGUI = !showGUI; redraw(); }));
     buttons.push(new Button(0, 30, 130, "save image", createFinalImage));
     buttons.push(new Button(0, 60, 110, "save SVG", createFinalSVG));
 
-    //Right line GUI (also dots ATM)
-    buttons.push(new Button(rightSideBar + 30, 0, 140, "line width", function() { }));
-    buttons.push(new Button(rightSideBar + 30, 30, 140, "dot size", function() { }));
-    buttons.push(new Button(rightSideBar + 30, 60, 140, "dot radius", function() { }));
-    buttons.push(new Button(rightSideBar + 30, 90, 140, "delete line", function() { deleteLineMode = true; redraw(); }));
-    buttons.push(new Button(rightSideBar + 30, 120, 140, "add line", function() { addNewLine(); redraw(); }));
-    buttons.push(new Button(rightSideBar + 30, 150, 140, "toggle curve", function() { convertLineMode = true; redraw(); }));
-    buttons.push(new Button(rightSideBar + 170, 0, 30, "+",
-        function() { lineWidth += 0.5; redraw(); }
-    ));
-    buttons.push(new Button(rightSideBar, 0, 30, "−",
-        function() { lineWidth -= 0.5; if (lineWidth < 0.5) lineWidth = 0.5; redraw(); }
-    ));
-    buttons.push(new Button(rightSideBar + 170, 30, 30, "+",
-        function() { dotSize += 0.5; redraw(); }
-    ));
-    buttons.push(new Button(rightSideBar, 30, 30, "−",
-        function() { dotSize -= 0.5; if (dotSize < 0.5) dotSize = 0.5; redraw(); }
-    ));
-    buttons.push(new Button(rightSideBar + 170, 60, 30, "+",
-        function() { dotRadius += 0.5; redraw(); }
-    ));
-    buttons.push(new Button(rightSideBar, 60, 30, "−",
-        function() { dotRadius -= 0.5; if (dotRadius < 0.5) dotRadius = 0.5; redraw(); }
-    ));
+    //Simple GUI
+    simpleButtons.push(new Button(0, (canvasSize / canvasScale) - 60, 160, "advanced mode", function() { simpleGUI = false; redraw();}));
+    simpleButtons.push(new Button(rightSideBar + 30, 0, 140, "line width", function() { }));
+    simpleButtons.push(new Button(rightSideBar + 30, 30, 140, "dot size", function() { }));
+    simpleButtons.push(new Button(rightSideBar + 30, 60, 140, "dot radius", function() { }));
+    simpleButtons.push(new Button(rightSideBar + 30, 90, 140, "delete line", function() { deleteLineMode = true; redraw(); }));
+    simpleButtons.push(new Button(rightSideBar + 30, 120, 140, "add line", function() { addNewLine(); redraw(); }));
+    simpleButtons.push(new Button(rightSideBar + 30, 150, 140, "toggle curve", function() { convertLineMode = true; redraw(); }));
+    simpleButtons.push(new Button(rightSideBar + 170, 0, 30, "+", function() { lineWidth += 0.5; redraw(); }));
+    simpleButtons.push(new Button(rightSideBar, 0, 30, "−", function() { lineWidth -= 0.5; if (lineWidth < 0.5) lineWidth = 0.5; redraw(); }));
+    simpleButtons.push(new Button(rightSideBar + 170, 30, 30, "+", function() { dotSize += 0.5; redraw(); }));
+    simpleButtons.push(new Button(rightSideBar, 30, 30, "−", function() { dotSize -= 0.5; if (dotSize < 0.5) dotSize = 0.5; redraw(); }));
+    simpleButtons.push(new Button(rightSideBar + 170, 60, 30, "+", function() { dotRadius += 0.5; redraw(); }));
+    simpleButtons.push(new Button(rightSideBar, 60, 30, "−", function() { dotRadius -= 0.5; if (dotRadius < 0.5) dotRadius = 0.5; redraw(); }));
+
+    //Complex GUI
+    advancedButtons.push(new Button(0, (canvasSize / canvasScale) - 60, 160, "simple mode", function() { simpleGUI = true; redraw(); }));
+
 }
 
 function GUIText(text) {
@@ -98,11 +94,29 @@ function drawGUI() {
             for (let button of buttons) {
                 button.draw();
             }
+
+            if(simpleGUI){
+                for (let button of simpleButtons) {
+                    button.draw();
+                }
+                for (let button of advancedButtons) {
+                    button.shown = false;
+                }
+            } else {
+                for (let button of simpleButtons) {
+                    button.shown = false;
+                }
+                for (let button of advancedButtons) {
+                    button.draw();
+                }
+            }
+
             if(selectedCircle != null){
                 GUIText("Scroll to change circle size");
             } else {
                 GUIText("are lines correct?: " + (checkLines() ? "yes" : "no"));
             }
+
         } else {
             for (let button of buttons) {
                 button.shown = false;

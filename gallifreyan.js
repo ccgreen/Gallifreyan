@@ -382,9 +382,20 @@ function doClick(e) {
     if (selectedCircle != null) { selectedCircle = null; redraw(); return; }
     if (selectedLine != null && !addLineMode) { selectedLine = null; lineEnd = 0; redraw(); return; }
 
+    console.log("main click");
     for (var button of buttons) {
         if (button.click(e)) return;
     }
+
+    for (let button of simpleButtons) {
+        if (button.click(e)) return;
+    }
+
+    for (let button of advancedButtons) {
+        if (button.click(e)) return;
+    }
+    console.log("done buttons");
+
 
     var minD = 40;
     for (var circle of allCircles) {
