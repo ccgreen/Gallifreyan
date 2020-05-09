@@ -9,6 +9,7 @@ const PI = Math.PI;
 var lineWidth   = 3.0 * canvasScale;
 var dotSize     = 10 * canvasScale;
 var dotRadius   = 10 * canvasScale;
+var renderDrawShift   = 0;
 
 var allCircles      = [],
     currentCircle   = null, //points to a wordCircle which contains selectedCircle
@@ -70,11 +71,11 @@ function angleBetweenCircles(circle, second) {
 }
 
 //since we are drawing mostly circles, it's not like we need control over beginPath() and stroke() anyway
-function drawCircle(x, y, r) { if(drawRender){x -= sideBarWidth;} ctx.beginPath(); ctx.arc(x, y, r, 0, PI * 2); ctx.stroke(); }
-function drawArc(x, y, r, a1, a2) { if(drawRender){x -= sideBarWidth;} ctx.beginPath(); ctx.arc(x, y, r, a1, a2); ctx.stroke(); }
-function drawBezier(x1, y1, x2, y2, ax1, ay1, ax2, ay2) { if(drawRender){x1 -= sideBarWidth; x2 -= sideBarWidth; ax1 -= sideBarWidth; ax2 -= sideBarWidth;}ctx.beginPath(); ctx.moveTo(x1, y1); ctx.bezierCurveTo(ax1, ay1, ax2, ay2, x2, y2); ctx.stroke(); }
-function drawLine(x1, y1, x2, y2) { if(drawRender){x1 -= sideBarWidth; x2 -= sideBarWidth;} ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); }
-function drawDot(x, y, r) { if(drawRender){x -= sideBarWidth;} ctx.beginPath(); ctx.arc(x, y, r, 0, PI * 2); ctx.fill(); }
+function drawCircle(x, y, r) { ctx.beginPath(); ctx.arc(x - renderDrawShift, y, r, 0, PI * 2); ctx.stroke(); }
+function drawArc(x, y, r, a1, a2) { ctx.beginPath(); ctx.arc(x - renderDrawShift, y, r, a1, a2); ctx.stroke(); }
+function drawBezier(x1, y1, x2, y2, ax1, ay1, ax2, ay2) { ctx.beginPath(); ctx.moveTo(x1 - renderDrawShift, y1); ctx.bezierCurveTo(ax1 - renderDrawShift, ay1, ax2 - renderDrawShift, ay2, x2 - renderDrawShift, y2); ctx.stroke(); }
+function drawLine(x1, y1, x2, y2) { ctx.beginPath(); ctx.moveTo(x1 - renderDrawShift, y1); ctx.lineTo(x2 - renderDrawShift, y2); ctx.stroke(); }
+function drawDot(x, y, r) { ctx.beginPath(); ctx.arc(x - renderDrawShift, y, r, 0, PI * 2); ctx.fill(); }
 
 //draws a red dot in a given location, signifying a circle you can select
 function drawRedDot(x, y) { ctx.fillStyle = "red"; drawDot(x, y, 3 + lineWidth / 3); ctx.fillStyle = "black"; }
@@ -836,7 +837,9 @@ function redraw() {
     ctx.clearRect(0, 0, canvasSize + sideBarWidth + sideBarWidth, canvasSize);
 
     var data = scrollerObj.getValues();
-    if(!drawRender){
+    if(drawRender){
+        drawShift = sideBarWidth;
+    } else {
         ctx.setTransform(data.zoom, 0, 0, data.zoom, -data.left * canvasScale, -data.top * canvasScale);
     }
 
@@ -848,6 +851,10 @@ function redraw() {
         line.draw();
 
     if (selectedCircle != null && selectedCircle.type != 6) drawAngles();
+
+    if(drawRender){
+        drawShift = 0;
+    }
 
     ctx.setTransform(1, 0, 0, 1, 0, 0);
 
