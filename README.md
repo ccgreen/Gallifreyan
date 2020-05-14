@@ -28,7 +28,17 @@ This edition adds support for unifon characters*
 - manually detach/reattach merged circles...
 - support for punctuation, numbers?
 - remember the state after changing the text if only some words were changed?
-- add individual circle editing (for dots, line size, etc)
+- add individual element editing
+  - dots
+    - size
+    - radius
+    - color
+  - lines
+    - thickness
+    - color
+  - circles
+    - thickness
+    - color
 
 #### enhancements:
 - make line creation algorithm smarter
@@ -42,6 +52,7 @@ This edition adds support for unifon characters*
 
 #### fixes:
 - fixed scaling of grandchildren
+- select general colors
 
 #### features:
 - configurable dot size
