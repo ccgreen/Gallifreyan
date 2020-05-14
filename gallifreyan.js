@@ -32,6 +32,9 @@ var addLineMode     = false;
 // next selected line will be toggled between straight and curved
 var convertLineMode = false;
 
+// default color (rgb) for things to be drawn in
+var colors;
+
 Array.prototype.remove = function(index) {
     this.splice(index, 1);
     return this;
@@ -86,6 +89,7 @@ $(document).ready(function() {
     $("input").val(localStorage.getItem("input"));
     console.log("preparing canvases")
     prepareCanvas();
+    colors = new Colors();
     console.log("creating GUI")
     createGUI();
 
@@ -126,6 +130,24 @@ function updateText() {
         words.push(word);
     }
     generateWords(words);
+}
+
+class Colors {
+    constructor(){
+        this.circleRed = 0;
+        this.circleGreen = 0;
+        this.circleBlue = 0;
+        this.lineRed = 0;
+        this.lineGreen = 0;
+        this.lineBlue = 0;
+        this.dotRed = 0;
+        this.dotGreen = 0;
+        this.dotBlue = 0;
+        this.backgroundRed = 255;
+        this.backgroundGreen = 255;
+        this.backgroundBlue = 255;
+    }
+
 }
 
 //discard any unfinished manual actions (line addition/deletion)
@@ -174,7 +196,7 @@ class Line {
         ]
     }
     draw() {
-        ctx.strokeStyle = (selectedLine === this) ? "grey" : "black";
+        ctx.strokeStyle = (selectedLine === this) ? "grey" : 'rgb(' + colors.lineRed +', ' + colors.lineGreen + ', ' + colors.lineBlue;
 
         let points = this.points, anchors = this.anchors;
         if (anchors) {
@@ -192,10 +214,12 @@ class Line {
                 drawBigRedDot(points[1].x, points[1].y);
             } else {
                 if (anchors) {
-                    ctx.strokeStyle = "gray"; ctx.lineWidth = 1;
+                    ctx.strokeStyle = "gray";
+                    ctx.lineWidth = 1;
                     drawLine(points[0].x, points[0].y, anchors[0].x, anchors[0].y);
                     drawLine(points[1].x, points[1].y, anchors[1].x, anchors[1].y)
-                    ctx.strokeStyle = "black"; ctx.lineWidth = lineWidth;
+                    ctx.strokeStyle = 'rgb(' + colors.lineRed +', ' + colors.lineGreen + ', ' + colors.lineBlue;
+                    ctx.lineWidth = lineWidth;
                     drawSmallRedDot(anchors[0].x, anchors[0].y);
                     drawSmallRedDot(anchors[1].x, anchors[1].y);
                 }
@@ -264,9 +288,9 @@ class Circle {
 
         // set colors for this circle
         this.colorDefault = true;
-        this.red = 0;
-        this.green = 0;
-        this.blue = 70;
+        this.colorRed = 0;
+        this.colorGreen = 0;
+        this.colorBlue = 70;
 
         // currently only word circles lay on main circle; this may change in the future
         this.isWordCircle = owner == allCircles[0];
@@ -287,9 +311,11 @@ class Circle {
             ctx.strokeStyle = "grey";
         } else {
             if(this.colorDefault === true){
-                ctx.strokeStyle = "black";
+                ctx.strokeStyle = 'rgb(' + colors.circleRed +', ' + colors.circleGreen + ', ' + colors.circleBlue;
+                ctx.fillStyle = 'rgb(' + colors.dotRed +', ' + colors.dotGreen + ', ' + colors.dotBlue;
             } else {
-                ctx.strokeStyle = 'rgb(' + this.red +', ' + this.green + ', ' + this.blue;
+                ctx.strokeStyle = 'rgb(' + this.colorRed +', ' + this.colorGreen + ', ' + this.colorBlue;
+                ctx.fillStyle = 'rgb(' + this.colorRed +', ' + this.colorGreen + ', ' + this.colorBlue;
             }
         }
 
@@ -406,6 +432,30 @@ function doClick(e) {
     }
 
     for (let button of advancedButtons) {
+        if (button.click(e)) return;
+    }
+
+    for (let button of advancedButtonsLines) {
+        if (button.click(e)) return;
+    }
+
+    for (let button of advancedButtonsColors) {
+        if (button.click(e)) return;
+    }
+
+    for (let button of advancedButtonsColorsCircle) {
+        if (button.click(e)) return;
+    }
+
+    for (let button of advancedButtonsColorsLine) {
+        if (button.click(e)) return;
+    }
+
+    for (let button of advancedButtonsColorsDot) {
+        if (button.click(e)) return;
+    }
+
+    for (let button of advancedButtonsColorsBackground) {
         if (button.click(e)) return;
     }
     console.log("done buttons");
@@ -851,10 +901,12 @@ function redraw() {
 
     var data = scrollerObj.getValues();
     if(drawRender){
-        drawShift = sideBarWidth;
+        renderDrawShift = sideBarWidth;
     } else {
         ctx.setTransform(data.zoom, 0, 0, data.zoom, -data.left * canvasScale, -data.top * canvasScale);
     }
+    ctx.fillStyle = 'rgb(' + colors.backgroundRed +', ' + colors.backgroundGreen + ', ' + colors.backgroundBlue;
+    ctx.fillRect(0, 0, canvasSize + sideBarWidth + sideBarWidth, canvasSize);
 
     ctx.lineWidth = lineWidth;
     for (var circle of allCircles)
@@ -866,7 +918,7 @@ function redraw() {
     if (selectedCircle != null && selectedCircle.type != 6) drawAngles();
 
     if(drawRender){
-        drawShift = 0;
+        renderDrawShift = 0;
     }
 
     ctx.setTransform(1, 0, 0, 1, 0, 0);
