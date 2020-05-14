@@ -262,6 +262,11 @@ class Circle {
         }
         this.subtype = subtype;
 
+        // set colors for this circle
+        this.colorDefault = true;
+        this.red = 0;
+        this.green = 0;
+        this.blue = 70;
 
         // currently only word circles lay on main circle; this may change in the future
         this.isWordCircle = owner == allCircles[0];
@@ -278,7 +283,15 @@ class Circle {
         this.update(d, a);
     }
     draw() {
-        ctx.strokeStyle = (selectedCircle === this) ? "grey" : "black";
+        if(selectedCircle === this){
+            ctx.strokeStyle = "grey";
+        } else {
+            if(this.colorDefault === true){
+                ctx.strokeStyle = "black";
+            } else {
+                ctx.strokeStyle = 'rgb(' + this.red +', ' + this.green + ', ' + this.blue;
+            }
+        }
 
         if (this.isWordCircle) {           //it's a wordCircle so we need to make a gap for B- and T- row letters
             var angles = [];                        //a list of intersections with these letters

@@ -49,21 +49,21 @@ function createGUI() {
 
     //Simple GUI
     simpleButtons.push(new Button(0, (canvasSize / canvasScale) - 60, 160, "advanced mode", function() { simpleGUI = false; redraw();}));
-    simpleButtons.push(new Button(rightSideBar + 30, 0, 140, "line width", function() { }));
-    simpleButtons.push(new Button(rightSideBar + 30, 30, 140, "dot size", function() { }));
-    simpleButtons.push(new Button(rightSideBar + 30, 60, 140, "dot radius", function() { }));
-    simpleButtons.push(new Button(rightSideBar + 30, 90, 140, "delete line", function() { deleteLineMode = true; redraw(); }));
-    simpleButtons.push(new Button(rightSideBar + 30, 120, 140, "add line", function() { addNewLine(); redraw(); }));
-    simpleButtons.push(new Button(rightSideBar + 30, 150, 140, "toggle curve", function() { convertLineMode = true; redraw(); }));
-    simpleButtons.push(new Button(rightSideBar + 170, 0, 30, "+", function() { lineWidth += 0.5; redraw(); }));
-    simpleButtons.push(new Button(rightSideBar, 0, 30, "−", function() { lineWidth -= 0.5; if (lineWidth < 0.5) lineWidth = 0.5; redraw(); }));
-    simpleButtons.push(new Button(rightSideBar + 170, 30, 30, "+", function() { dotSize += 0.5; redraw(); }));
-    simpleButtons.push(new Button(rightSideBar, 30, 30, "−", function() { dotSize -= 0.5; if (dotSize < 0.5) dotSize = 0.5; redraw(); }));
-    simpleButtons.push(new Button(rightSideBar + 170, 60, 30, "+", function() { dotRadius += 0.5; redraw(); }));
-    simpleButtons.push(new Button(rightSideBar, 60, 30, "−", function() { dotRadius -= 0.5; if (dotRadius < 0.5) dotRadius = 0.5; redraw(); }));
+    simpleButtons.push(new Button(30, 120, 140, "line width", function() { }));
+    simpleButtons.push(new Button(30, 150, 140, "dot size", function() { }));
+    simpleButtons.push(new Button(30, 180, 140, "dot radius", function() { }));
+    simpleButtons.push(new Button(170, 120, 30, "+", function() { lineWidth += 0.5; redraw(); }));
+    simpleButtons.push(new Button(0, 120, 30, "−", function() { lineWidth -= 0.5; if (lineWidth < 0.5) lineWidth = 0.5; redraw(); }));
+    simpleButtons.push(new Button(170, 150, 30, "+", function() { dotSize += 0.5; redraw(); }));
+    simpleButtons.push(new Button(0, 150, 30, "−", function() { dotSize -= 0.5; if (dotSize < 0.5) dotSize = 0.5; redraw(); }));
+    simpleButtons.push(new Button(170, 180, 30, "+", function() { dotRadius += 0.5; redraw(); }));
+    simpleButtons.push(new Button(0, 180, 30, "−", function() { dotRadius -= 0.5; if (dotRadius < 0.5) dotRadius = 0.5; redraw(); }));
 
     //Complex GUI
     advancedButtons.push(new Button(0, (canvasSize / canvasScale) - 60, 160, "simple mode", function() { simpleGUI = true; redraw(); }));
+    advancedButtons.push(new Button(0 + 30, 90, 140, "delete line", function() { deleteLineMode = true; redraw(); }));
+    advancedButtons.push(new Button(0 + 30, 120, 140, "add line", function() { addNewLine(); redraw(); }));
+    advancedButtons.push(new Button(0 + 30, 150, 140, "toggle curve", function() { convertLineMode = true; redraw(); }));
 
 }
 
@@ -82,12 +82,15 @@ function drawGUI() {
             ctx.moveTo(sideBarWidth, 0);
             ctx.lineTo(sideBarWidth, canvasSize);
             ctx.stroke();
-            //Clear right side and add border
-            ctx.clearRect(canvasSize + sideBarWidth, 0, sideBarWidth, canvasSize);
-            ctx.beginPath();
-            ctx.moveTo(canvasSize + sideBarWidth, 0);
-            ctx.lineTo(canvasSize + sideBarWidth, canvasSize);
-            ctx.stroke();
+
+            if(!simpleGUI){
+                //Clear right side and add border
+                ctx.clearRect(canvasSize + sideBarWidth, 0, sideBarWidth, canvasSize);
+                ctx.beginPath();
+                ctx.moveTo(canvasSize + sideBarWidth, 0);
+                ctx.lineTo(canvasSize + sideBarWidth, canvasSize);
+                ctx.stroke();
+            }
 
             ctx.lineWidth = tempLineWidth;
 
