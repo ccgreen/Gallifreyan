@@ -84,9 +84,9 @@ function drawLine(x1, y1, x2, y2) { ctx.beginPath(); ctx.moveTo(x1 - renderDrawS
 function drawDot(x, y, r) { ctx.beginPath(); ctx.arc(x - renderDrawShift, y, r, 0, PI * 2); ctx.fill(); }
 
 //draws a red dot in a given location, signifying a circle you can select
-function drawRedDot(x, y) { ctx.fillStyle = "red"; drawDot(x, y, 3 + lineWidth / 3); ctx.fillStyle = "black"; }
-function drawSmallRedDot(x, y) { ctx.fillStyle = "red"; drawDot(x, y, 1 + lineWidth / 3); ctx.fillStyle = "black"; }
-function drawBigRedDot(x, y) { ctx.fillStyle = "red"; drawDot(x, y, 4 + lineWidth / 2); ctx.fillStyle = "black"; }
+function drawRedDot(x, y) { ctx.fillStyle = 'rgb(255, ' + (255 - colorsBackground.green) + ', ' + (255 - colorsBackground.blue) + ')'; drawDot(x, y, 3 + lineWidth / 3); ctx.fillStyle = "black"; }
+function drawSmallRedDot(x, y) { ctx.fillStyle = 'rgb(255, ' + (255 - colorsBackground.green) + ', ' + (255 - colorsBackground.blue) + ')'; drawDot(x, y, 1 + lineWidth / 3); ctx.fillStyle = "black"; }
+function drawBigRedDot(x, y) { ctx.fillStyle = 'rgb(255, ' + (255 - colorsBackground.green) + ', ' + (255 - colorsBackground.blue) + ')'; drawDot(x, y, 4 + lineWidth / 2); ctx.fillStyle = "black"; }
 
 $(document).ready(function() {
     $("input").val(localStorage.getItem("input"));
