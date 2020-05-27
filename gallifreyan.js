@@ -33,7 +33,10 @@ var addLineMode     = false;
 var convertLineMode = false;
 
 // default color (rgb) for things to be drawn in
-var colors;
+var colorsBackground;
+var colorsCircles;
+var colorsDots;
+var colorsLines;
 
 Array.prototype.remove = function(index) {
     this.splice(index, 1);
@@ -89,7 +92,10 @@ $(document).ready(function() {
     $("input").val(localStorage.getItem("input"));
     console.log("preparing canvases")
     prepareCanvas();
-    colors = new Colors();
+    colorsBackground = new Colors(255, 255, 255);
+    colorsCircles = new Colors(0, 0, 0);
+    colorsDots = new Colors(0, 0, 0);
+    colorsLines = new Colors(0, 0, 0);
     console.log("creating GUI")
     createGUI();
 
@@ -133,21 +139,47 @@ function updateText() {
 }
 
 class Colors {
-    constructor(){
-        this.circleRed = 0;
-        this.circleGreen = 0;
-        this.circleBlue = 0;
-        this.lineRed = 0;
-        this.lineGreen = 0;
-        this.lineBlue = 0;
-        this.dotRed = 0;
-        this.dotGreen = 0;
-        this.dotBlue = 0;
-        this.backgroundRed = 255;
-        this.backgroundGreen = 255;
-        this.backgroundBlue = 255;
+    constructor(red, green, blue){
+        this.rgb = 'rgb(' + red +', ' + green + ', ' + blue + ')';
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
     }
 
+    calculateColors(){
+        this.rgb = 'rgb(' + this.red +', ' + this.green + ', ' + this.blue;
+    }
+
+    changeColor(color, amount){
+        switch(color) {
+            case "red":
+                this.red += amount;
+                if(this.red < 0){
+                    this.red = 0;
+                } else if(this.red > 255){
+                    this.red = 255;
+                }
+                break;
+            case "green":
+                this.green += amount;
+                if(this.green < 0){
+                    this.green = 0;
+                } else if(this.green > 255){
+                    this.green = 255;
+                }
+                break;
+            case "blue":
+                this.blue += amount;
+                if(this.blue < 0){
+                    this.blue = 0;
+                } else if(this.blue > 255){
+                    this.blue = 255;
+                }
+                break;
+            default:
+        }
+        this.calculateColors();
+    }
 }
 
 //discard any unfinished manual actions (line addition/deletion)
@@ -196,7 +228,7 @@ class Line {
         ]
     }
     draw() {
-        ctx.strokeStyle = (selectedLine === this) ? "grey" : 'rgb(' + colors.lineRed +', ' + colors.lineGreen + ', ' + colors.lineBlue;
+        ctx.strokeStyle = (selectedLine === this) ? "grey" : colorsLines.rgb;
 
         let points = this.points, anchors = this.anchors;
         if (anchors) {
@@ -218,7 +250,7 @@ class Line {
                     ctx.lineWidth = 1;
                     drawLine(points[0].x, points[0].y, anchors[0].x, anchors[0].y);
                     drawLine(points[1].x, points[1].y, anchors[1].x, anchors[1].y)
-                    ctx.strokeStyle = 'rgb(' + colors.lineRed +', ' + colors.lineGreen + ', ' + colors.lineBlue;
+                    ctx.strokeStyle = colorLines.rgb;
                     ctx.lineWidth = lineWidth;
                     drawSmallRedDot(anchors[0].x, anchors[0].y);
                     drawSmallRedDot(anchors[1].x, anchors[1].y);
@@ -311,8 +343,8 @@ class Circle {
             ctx.strokeStyle = "grey";
         } else {
             if(this.colorDefault === true){
-                ctx.strokeStyle = 'rgb(' + colors.circleRed +', ' + colors.circleGreen + ', ' + colors.circleBlue;
-                ctx.fillStyle = 'rgb(' + colors.dotRed +', ' + colors.dotGreen + ', ' + colors.dotBlue;
+                ctx.strokeStyle = colorsCircles.rgb;
+                ctx.fillStyle = colorsDots.rgb;
             } else {
                 ctx.strokeStyle = 'rgb(' + this.colorRed +', ' + this.colorGreen + ', ' + this.colorBlue;
                 ctx.fillStyle = 'rgb(' + this.colorRed +', ' + this.colorGreen + ', ' + this.colorBlue;
@@ -905,7 +937,7 @@ function redraw() {
     } else {
         ctx.setTransform(data.zoom, 0, 0, data.zoom, -data.left * canvasScale, -data.top * canvasScale);
     }
-    ctx.fillStyle = 'rgb(' + colors.backgroundRed +', ' + colors.backgroundGreen + ', ' + colors.backgroundBlue;
+    ctx.fillStyle = colorsBackground.rgb;
     ctx.fillRect(0, 0, canvasSize + sideBarWidth + sideBarWidth, canvasSize);
 
     ctx.lineWidth = lineWidth;
