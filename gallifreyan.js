@@ -259,6 +259,12 @@ class Line {
                 drawRedDot(points[0].x, points[0].y);
                 drawRedDot(points[1].x, points[1].y);
             }
+        } else {
+            var temp = ctx.fillStyle;
+            ctx.fillStyle = colorsLines.rgb;
+            drawDot(points[0].x, points[0].y, lineWidth / 2);
+            drawDot(points[1].x, points[1].y, lineWidth / 2);
+            ctx.fillStyle = temp;
         }
     }
     toggleCurve() {
@@ -346,8 +352,8 @@ class Circle {
                 ctx.strokeStyle = colorsCircles.rgb;
                 ctx.fillStyle = colorsDots.rgb;
             } else {
-                ctx.strokeStyle = 'rgb(' + this.colorRed +', ' + this.colorGreen + ', ' + this.colorBlue;
-                ctx.fillStyle = 'rgb(' + this.colorRed +', ' + this.colorGreen + ', ' + this.colorBlue;
+                ctx.strokeStyle = 'rgb(' + this.colorRed +', ' + this.colorGreen + ', ' + this.colorBlue + ')';
+                ctx.fillStyle = 'rgb(' + this.colorRed +', ' + this.colorGreen + ', ' + this.colorBlue + ')';
             }
         }
 
@@ -366,7 +372,12 @@ class Circle {
         }
         else if (this.hasGaps) {      //so it's not a wordCircle; now let's check if it's a B- or T- row letter
             var an = angleBetweenCircles(this, this.owner);
+            var tempFillStyle = ctx.fillStyle;
+            ctx.fillStyle = (this.colorDefault) ? ctx.fillStyle = colorsCircles.rgb : 'rgb(' + this.colorRed +', ' + this.colorGreen + ', ' + this.colorBlue + ')';
             drawArc(this.x, this.y, this.r, this.a + PI - an, this.a + PI + an);
+            drawDot(...pointFromAngle(this, this.r, this.a + PI - an), lineWidth / 2);
+            drawDot(...pointFromAngle(this, this.r, this.a + PI + an), lineWidth / 2);
+            ctx.fillStyle = tempFillStyle;
         }
         else {                                      //if not, we can just draw a circle there
             drawCircle(this.x, this.y, this.r);
