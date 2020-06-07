@@ -326,9 +326,7 @@ class Circle {
 
         // set colors for this circle
         this.colorDefault = true;
-        this.colorRed = 0;
-        this.colorGreen = 0;
-        this.colorBlue = 70;
+        this.color = new Colors(0, 0, 70);
 
         // currently only word circles lay on main circle; this may change in the future
         this.isWordCircle = owner == allCircles[0];
@@ -352,8 +350,8 @@ class Circle {
                 ctx.strokeStyle = colorsCircles.rgb;
                 ctx.fillStyle = colorsDots.rgb;
             } else {
-                ctx.strokeStyle = 'rgb(' + this.colorRed +', ' + this.colorGreen + ', ' + this.colorBlue + ')';
-                ctx.fillStyle = 'rgb(' + this.colorRed +', ' + this.colorGreen + ', ' + this.colorBlue + ')';
+                ctx.strokeStyle = this.color.rgb;
+                ctx.fillStyle = this.color.rgb;
             }
         }
 
@@ -373,7 +371,7 @@ class Circle {
         else if (this.hasGaps) {      //so it's not a wordCircle; now let's check if it's a B- or T- row letter
             var an = angleBetweenCircles(this, this.owner);
             var tempFillStyle = ctx.fillStyle;
-            ctx.fillStyle = (this.colorDefault) ? ctx.fillStyle = colorsCircles.rgb : 'rgb(' + this.colorRed +', ' + this.colorGreen + ', ' + this.colorBlue + ')';
+            ctx.fillStyle = (this.colorDefault) ? ctx.fillStyle = colorsCircles.rgb : this.color.rgb;
             drawArc(this.x, this.y, this.r, this.a + PI - an, this.a + PI + an);
             drawDot(...pointFromAngle(this, this.r, this.a + PI - an), lineWidth / 2);
             drawDot(...pointFromAngle(this, this.r, this.a + PI + an), lineWidth / 2);
@@ -462,10 +460,32 @@ class Circle {
 //selects the circle/line. Checks whether any buttons are pressed.
 function doClick(e) {
     var mouse = getMouse(e);
+    var btnCode;
+    if ('object' === typeof e) {
+            btnCode = e.button;
+
+            switch (btnCode) {
+                case 0:
+                    console.log('Left button clicked.');
+                break;
+
+                case 1:
+                    console.log('Middle button clicked.');
+                break;
+
+                case 2:
+                    console.log('Right button clicked.');
+                break;
+
+                default:
+                    console.log('Unexpected code: ' + btnCode);
+            }
+        }
+
     if (selectedCircle != null) { selectedCircle = null; redraw(); return; }
     if (selectedLine != null && !addLineMode) { selectedLine = null; lineEnd = 0; redraw(); return; }
 
-    console.log("main click");
+    console.log("main click " + event.type);
     for (var button of buttons) {
         if (button.click(e)) return;
     }
