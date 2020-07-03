@@ -90,6 +90,7 @@ function drawBigRedDot(x, y) { ctx.fillStyle = 'rgb(255, ' + (255 - colorsBackgr
 
 $(document).ready(function() {
     $("input").val(localStorage.getItem("input"));
+    $("checkbox").val(localStorage.getItem("#use_unifon"));
     console.log("preparing canvases")
     prepareCanvas();
     colorsBackground = new Colors(255, 255, 255);
@@ -102,8 +103,17 @@ $(document).ready(function() {
     redraw();
 });
 
-//resets everything and parses the text
+
 function updateText() {
+    if($("#use_unifon").is(":checked")) {
+        updateText_unifon();
+    } else {
+        updateText_shermans();
+    }
+}
+
+//resets everything and parses the text
+function updateText_unifon() {
     resetZoom();
 
     allCircles = []; lines = []; currentCircle = null; selectedCircle = null; selectedLine = null;
@@ -121,6 +131,35 @@ function updateText() {
                 word.push(toParse.substring(i, i + 3));
                 i = i + 2;
 			} else if (toParse.substring(i, i + 2).match("(ch|sh|th|ng|qu|zh|ph|wh|gh|[aeiou][1-5])")) {
+                word.push(toParse.substring(i, i + 2));
+                i++;
+            } else if (toParse[i] === "c") {
+                //soft c comes usually before i, e or y
+                if (i+1 < toParse.length && toParse[i+1].match("[iey]"))
+                    word.push("s");
+                else
+                    word.push("k");
+            } else {
+                word.push(toParse[i]);
+            }
+        }
+        words.push(word);
+    }
+    generateWords(words);
+}
+
+function updateText_shermans() {
+    resetZoom();
+
+    allCircles = []; lines = []; currentCircle = null; selectedCircle = null; selectedLine = null;
+
+    var text = $("input").val().trim().toLowerCase().split(" ");
+    localStorage.setItem("input", $("input").val());
+    var words = [];
+    for (var toParse of text) {
+        var word = [];
+        for (var i = 0; i < toParse.length; i++) {
+            if (toParse.substring(i, i + 2).match("(ch|sh|th|ng|qu)")) {
                 word.push(toParse.substring(i, i + 2));
                 i++;
             } else if (toParse[i] === "c") {
@@ -461,118 +500,116 @@ class Circle {
 function doClick(e) {
     var mouse = getMouse(e);
     var btnCode;
+
+    if (selectedCircle != null) { selectedCircle = null; redraw(); return; }
+    if (selectedLine != null && !addLineMode) { selectedLine = null; lineEnd = 0; redraw(); return; }
+
     if ('object' === typeof e) {
             btnCode = e.button;
 
             switch (btnCode) {
                 case 0:
-                    console.log('Left button clicked.');
-                break;
+                    //console.log('Left button clicked.');
+                    for (var button of buttons) {
+                        if (button.click(e)) return;
+                    }
 
+                    for (let button of simpleButtons) {
+                        if (button.click(e)) return;
+                    }
+
+                    for (let button of advancedButtons) {
+                        if (button.click(e)) return;
+                    }
+
+                    for (let button of advancedButtonsLines) {
+                        if (button.click(e)) return;
+                    }
+
+                    for (let button of advancedButtonsColors) {
+                        if (button.click(e)) return;
+                    }
+
+                    for (let button of advancedButtonsColorsCircle) {
+                        if (button.click(e)) return;
+                    }
+
+                    for (let button of advancedButtonsColorsLine) {
+                        if (button.click(e)) return;
+                    }
+
+                    for (let button of advancedButtonsColorsDot) {
+                        if (button.click(e)) return;
+                    }
+
+                    for (let button of advancedButtonsColorsBackground) {
+                        if (button.click(e)) return;
+                    }
+                    console.log("done buttons");
+
+                    var minD = 40;
+                    for (var circle of allCircles) {
+                        if (!circle.selectable) continue;
+                        var d = dist(circle, mouse);
+                        if (d < minD) {
+                            minD = d;
+                            selectedCircle = circle;
+                            if (selectedCircle.type === 6) currentCircle = selectedCircle.owner.owner;
+                            else currentCircle = selectedCircle.owner;
+                        }
+                    }
+                    for (var line of lines) {
+                        if (!line.selectable) continue;
+                        for (var j = 0; j < 2; ++j) {
+                            var d = dist(line.points[j], mouse);
+                            if (d < minD) {
+                                minD = d;
+                                selectedLine = line;
+                                lineEnd = j;
+                            }
+                        }
+                        if (line.anchors) {
+                            for (var j = 0; j < 2; ++j) {
+                                var d = dist(line.anchors[j], mouse);
+                                if (d < minD) {
+                                    minD = d;
+                                    selectedLine = line;
+                                    lineEnd = j+2;
+                                }
+                            }
+                        }
+                    }
+                    if (selectedLine != null) {
+                        selectedCircle = null;    //if we've selected a line, let's unselect a circle
+                        if (deleteLineMode) {
+                            deleteLine(selectedLine);
+                            selectedLine = null;
+                        } else if (convertLineMode) {
+                            selectedLine.toggleCurve();
+                            selectedLine = null;
+                        }
+                    }
+                    if (deleteLineMode || convertLineMode) {
+                        deleteLineMode = false;
+                        convertLineMode = false;
+                        redraw();
+                    }
+                    if (addLineMode)
+                        addLineMode = false;	//don't move both ends anymore; now it's a normal selectedLine with one attached end
+                break;
                 case 1:
-                    console.log('Middle button clicked.');
+                    //console.log('Middle button clicked.');
                 break;
-
                 case 2:
-                    console.log('Right button clicked.');
+                    //console.log('Right button clicked.');
                 break;
-
                 default:
-                    console.log('Unexpected code: ' + btnCode);
+                    console.log('Unexpected click type: ' + btnCode);
             }
         }
-
-    if (selectedCircle != null) { selectedCircle = null; redraw(); return; }
-    if (selectedLine != null && !addLineMode) { selectedLine = null; lineEnd = 0; redraw(); return; }
 
     console.log("main click " + event.type);
-    for (var button of buttons) {
-        if (button.click(e)) return;
-    }
 
-    for (let button of simpleButtons) {
-        if (button.click(e)) return;
-    }
-
-    for (let button of advancedButtons) {
-        if (button.click(e)) return;
-    }
-
-    for (let button of advancedButtonsLines) {
-        if (button.click(e)) return;
-    }
-
-    for (let button of advancedButtonsColors) {
-        if (button.click(e)) return;
-    }
-
-    for (let button of advancedButtonsColorsCircle) {
-        if (button.click(e)) return;
-    }
-
-    for (let button of advancedButtonsColorsLine) {
-        if (button.click(e)) return;
-    }
-
-    for (let button of advancedButtonsColorsDot) {
-        if (button.click(e)) return;
-    }
-
-    for (let button of advancedButtonsColorsBackground) {
-        if (button.click(e)) return;
-    }
-    console.log("done buttons");
-
-
-    var minD = 40;
-    for (var circle of allCircles) {
-        if (!circle.selectable) continue;
-        var d = dist(circle, mouse);
-        if (d < minD) {
-            minD = d;
-            selectedCircle = circle;
-            if (selectedCircle.type === 6) currentCircle = selectedCircle.owner.owner;
-            else currentCircle = selectedCircle.owner;
-        }
-    }
-    for (var line of lines) {
-        if (!line.selectable) continue;
-        for (var j = 0; j < 2; ++j) {
-            var d = dist(line.points[j], mouse);
-            if (d < minD) {
-                minD = d;
-                selectedLine = line;
-                lineEnd = j;
-            }
-        }
-        if (line.anchors) {
-            for (var j = 0; j < 2; ++j) {
-                var d = dist(line.anchors[j], mouse);
-                if (d < minD) {
-                    minD = d;
-                    selectedLine = line;
-                    lineEnd = j+2;
-                }
-            }
-        }
-    }
-    if (selectedLine != null) {
-        selectedCircle = null;    //if we've selected a line, let's unselect a circle
-        if (deleteLineMode) {
-            deleteLine(selectedLine);
-            selectedLine = null;
-        } else if (convertLineMode) {
-            selectedLine.toggleCurve();
-            selectedLine = null;
-        }
-    }
-    if (deleteLineMode || convertLineMode) {
-        deleteLineMode = false;
-        convertLineMode = false;
-        redraw();
-    }
-    if (addLineMode)
-        addLineMode = false;	//don't move both ends anymore; now it's a normal selectedLine with one attached end
 }
 
 //makes sure that the correct distance from the base circle is kept according to language rules
